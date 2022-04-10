@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Shared\WasmLogToBrowser.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Library\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject DebugService DebugService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<div class="server-console">Server Console: @_hubConnection?.State</div>
+
+@code {
+    private HubConnection? _hubConnection;
+
+    private void OnReceiveLogMessage(string logMessage)
+    {
+        DebugService.AddLogMessage(logMessage);        
+    }
+
+    private async Task OnChange()
+    {   
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override async void OnInitialized()
+    {        
+        DebugService.OnChange += OnChange;
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{NavigationManager.BaseUri}hubs/logging")
+            .Build();
+
+        _hubConnection.On<string>("Log", OnReceiveLogMessage);        
+        await _hubConnection.StartAsync();
+    }
+
+    public void Dispose()
+    {        
+        DebugService.OnChange -= OnChange;
+        if (_hubConnection != null)
+        {            
+            try
+            {             
+                _hubConnection.StopAsync();
+                _hubConnection.DisposeAsync();
+                _hubConnection = null;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            } finally
+            {
+                _hubConnection = null;
+            }
+        }
+    }
+}

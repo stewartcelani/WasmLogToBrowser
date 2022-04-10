@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject DebugService DebugService
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +8,35 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@if (DebugService.LogMessages.Count > 0)
+{
+    <hr />
+    <h3>Server Console</h3>    
+    <div class="console p-3">
+        @foreach (string s in DebugService.LogMessages)
+        {
+            <div>@s</div>
+        }
+    </div>    
+}
+
+@code {
+    public async Task OnChange()
+    {        
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override void OnInitialized()
+    {
+        DebugService.OnChange += OnChange;        
+    }
+
+    public void Dispose()
+    {
+        DebugService.OnChange -= OnChange;               
+    }
+}
