@@ -12,6 +12,12 @@
             HandleOnChange();
         }
 
+        public void ClearLogMessages()
+        {
+            LogMessages.Clear();
+            HandleOnChange();
+        }
+
         public void ToggleConnectToServerConsole()
         {
             ConnectToServerConsole = !ConnectToServerConsole;

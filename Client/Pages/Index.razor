@@ -12,7 +12,8 @@
 @if (DebugService.LogMessages.Count > 0)
 {
     <hr />
-    <h3>Server Console</h3>    
+    <h3>Server Console</h3>   
+    <button style="float: right;" class="btn-sm btn-danger m-2" @onclick="DebugService.ClearLogMessages">Clear console</button>
     <div class="console">
         @foreach (string s in DebugService.LogMessages)
         {
