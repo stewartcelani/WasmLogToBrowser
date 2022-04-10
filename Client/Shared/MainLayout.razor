@@ -19,3 +19,23 @@
         }
     </main>
 </div>
+
+@code {
+    public async Task OnChange()
+    {     
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override void OnInitialized()
+    {
+        DebugService.OnChange += OnChange;                    
+    }
+
+    public void Dispose()
+    {        
+        DebugService.OnChange -= OnChange;       
+    }
+}
