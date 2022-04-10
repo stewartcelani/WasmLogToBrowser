@@ -1,20 +1,30 @@
-﻿namespace WasmLogToBrowser.Client.Services
+﻿using WasmLogToBrowser.Client.Library;
+
+namespace WasmLogToBrowser.Client.Services
 {
     public class DebugService
     {
+        private readonly JsConsole _console;
         public event Func<Task>? OnChange;
         public bool ConnectToServerConsole = false;
         public List<string> LogMessages = new List<string>();
 
-        public void AddLogMessage(string logMessage)
+        public DebugService(JsConsole console)
+        {
+            _console = console;
+        }
+
+        public async Task AddLogMessage(string logMessage)
         {
             LogMessages.Add(logMessage);
+            await _console.LogAsync(logMessage);
             HandleOnChange();
         }
 
-        public void ClearLogMessages()
+        public async Task ClearLogMessages()
         {
             LogMessages.Clear();
+            await _console.ClearAsync();
             HandleOnChange();
         }
 

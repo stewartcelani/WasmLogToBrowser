@@ -8,9 +8,9 @@
 @code {
     private HubConnection? _hubConnection;
 
-    private void OnReceiveLogMessage(string logMessage)
+    private async Task OnReceiveLogMessage(string logMessage)
     {
-        DebugService.AddLogMessage(logMessage);        
+        await DebugService.AddLogMessage(logMessage);        
     }
 
     private async Task OnChange()
