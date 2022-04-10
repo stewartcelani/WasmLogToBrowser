@@ -37,6 +37,13 @@ namespace WasmLogToBrowser.Server.Logging
             };
             config.AddRule(minLevel: NLog.LogLevel.Trace, maxLevel: NLog.LogLevel.Fatal, target: traceFileTarget);
 
+            // Log to SignalR LoggingHub
+            var loggingHubTarget = new LoggingHubTarget("https://localhost:7254/hubs/logging")
+            {
+                Layout = layout
+            };
+            config.AddRule(minLevel: NLog.LogLevel.Trace, maxLevel: NLog.LogLevel.Fatal, target: loggingHubTarget);
+
             LogManager.Configuration = config;
             Log = LogManager.GetCurrentClassLogger();
         }
